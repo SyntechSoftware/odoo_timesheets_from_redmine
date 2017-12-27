@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="redmine_user_tree" model="ir.ui.view">
+            <field name="name">student.student.tree</field>
+            <field name="model">redmine.user</field>
+            <field name="priority" eval="8" />
+            <field name="arch" type="xml">
+                <tree string="Student">
+                    <field name="redmine_login" />
+                    <field name="redmine_pass" />
+                </tree>
+            </field>
+        </record>
+        <record id="view_student_form" model="ir.ui.view">
+            <field name="name">redmine.user.form</field>
+            <field name="model">redmine.user</field>
+            <field name="priority" eval="8" />
+            <field name="arch" type="xml">
+                <form string="Student">
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <table>
+                                    <tr>
+                                        <td style="padding-right:10px;"><field name="redmine_login" required="1" placeholder="Login" /></td>
+                                        <td style="padding-right:10px;"><field name="redmine_pass" placeholder="Pass" /></td>
+                                    </tr>
+                                </table>
+                            </h1>
+                        </div>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record model="ir.actions.act_window" id="action_view_users">
+            <field name="name">Users</field>
+            <field name="res_model">redmine.user</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[]</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Create new user
+                </p>
+            </field>
+        </record>
+        <menuitem id="menu_redmine" name="Redmine"/>
+        <menuitem id="school_student" name="Redmine User" parent="menu_redmine"
+                  action="action_view_users"/>
+    </data>
+</odoo>
