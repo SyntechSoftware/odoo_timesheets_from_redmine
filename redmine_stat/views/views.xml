@@ -18,18 +18,21 @@
             <field name="arch" type="xml">
                 <form string="Button record">
                     <button string="Sync projects" type="object" name="sync_projects" class="oe_highlight"/>
+                    <!--<group>-->
+                        <!--<field name="project_title"/>-->
+                    <!--</group>-->
                 </form>
             </field>
         </record>
-        <record model="ir.actions.act_window" id="action_view_users">
-            <field name="name">Users</field>
+        <record model="ir.actions.act_window" id="action_view_projects">
+            <field name="name">Projects</field>
             <field name="res_model">redmine.project</field>
             <field name="view_type">form</field>
-            <field name="view_mode">tree</field>
+            <field name="view_mode">tree,form</field>
             <field name="domain">[]</field>
         </record>
         <menuitem id="menu_redmine" name="Redmine"/>
         <menuitem id="redmine_project" name="Redmine Projects" parent="menu_redmine"
-                  action="action_view_users"/>
+                  action="action_view_projects"/>
     </data>
 </odoo>

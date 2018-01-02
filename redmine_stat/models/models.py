@@ -17,4 +17,4 @@ class RedmineProject(models.Model):
     def sync_projects(self):
         redmine = Redmine('https://pm.syntech.software', username='oleg.karpov@syntech.software', password='123456')
         for project in redmine.project.all():
-            self.create({'project_title': '123123'})
+            self.create({'project_title': project.name})
