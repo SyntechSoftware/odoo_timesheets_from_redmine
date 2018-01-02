@@ -16,6 +16,6 @@
     'installable': True,
     'auto_install': False,
     "external_dependencies": {
-        'python': ['redminelib']
+        'python3': ['python-redmine']
     },
 }
