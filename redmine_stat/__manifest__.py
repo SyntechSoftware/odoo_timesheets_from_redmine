@@ -7,7 +7,7 @@
     'company': 'Syntech',
     'website': 'http://www.syntech.com',
     'category': 'Tools',
-    'depends': ['base'],
+    'depends': ['hr_timesheet'],
     'license': 'AGPL-3',
     'data': [
         'views/views.xml',
@@ -16,6 +16,7 @@
     'installable': True,
     'auto_install': False,
     "external_dependencies": {
-        'python': ['redminelib']
+        'python3': ['redminelib', 'python-redmine'],
+        'pip3': ['python-redmine']
     },
 }
