@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="timesheet_action_all" model="ir.actions.act_window">
+            <field name="name">All Timesheets</field>
+            <field name="res_model">account.analytic.line</field>
+            <field name="domain">[('project_id', '!=', False), ('project_id', '!=', False)]</field>
+        </record>
+
+
+        <menuitem id="menu_redmine" name="Redmine Timesheet"/>
+
+        <menuitem id="redmine_user" name="Redmine User" parent="menu_redmine"
+                  action="timesheet_action_all"/>
+
+    </data>
+</odoo>

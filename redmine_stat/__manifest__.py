@@ -10,7 +10,8 @@
     'depends': ['hr_timesheet'],
     'license': 'AGPL-3',
     'data': [
-        'views/views.xml',
+        'views/redmine_menu.xml',
+        # 'views/redmine_backend_view.xml',
     ],
     'demo': [],
     'installable': True,
