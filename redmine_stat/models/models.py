@@ -38,7 +38,19 @@ class RedmineTimeEntry(orm.Model):
                 pass
 
             for task in tasks:
-                task_obj = self.env['project.task'].create({'project_id': proj_obj.id, 'name': task})
+                task_obj = self.env['project.task'].create({
+                    'project_id': proj_obj.id,
+                    'name': task,
+                    'description': task.description,
+                    # 'priority': task.priority,
+                    'create_date': task.created_on,
+                    # 'date_start': task.start_date,
+                    # 'date_end': task.start_end,
+                    # 'date_deadline': task.due_date,
+                    # 'date_last_stage_update': task.updated_on,
+                    'progress': task.done_ratio,
+                    # 'status': task.status,
+                })
 
                 time_entrys = []
                 try:
@@ -47,8 +59,21 @@ class RedmineTimeEntry(orm.Model):
                     pass
 
                 for time_entry in time_entrys:
-                    timesheet_obj = self.env['account.analytic.line'].create({'name': time_entry.comments, 'project_id': proj_obj.id, 'task_id': task_obj.id})
-                    self.create({'timesheet_id': timesheet_obj.id, 'redmine_id': 1, 'sync_date': datetime.now(), 'updated_on_redmine': datetime.now()})
+                    time_entry_name = time_entry.comments or str(time_entry)
+                    timesheet_obj = self.env['account.analytic.line'].create({
+                        'name': time_entry_name,
+                        'project_id': proj_obj.id,
+                        'task_id': task_obj.id
+                    })
+                    self.create({
+                        'timesheet_id': timesheet_obj.id,
+                        'redmine_id': time_entry.id,
+                        'sync_date': datetime.now(),
+                        'updated_on_redmine': datetime.now(),
+                        'name': time_entry.comments,
+                        'create_date': time_entry.created_on,
+                        'amount': time_entry.hours,
+                    })
 
                     # # check if project exists
             # # project_obj = project_model.search([('name', '=', project.name)])
