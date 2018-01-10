@@ -1,21 +1,29 @@
 # -*- coding: utf-8 -*-
-from odoo import models, fields, api
 import logging
 
-from odoo.osv import orm
+from odoo import models, fields, api
 
 
-_logger = logging.getLogger()
+_logger = logging.getLogger(__name__)
+
+try:
+    from redminelib import Redmine
+except ImportError:
+    pass
 
 
-class RedmineTimeEntry(orm.Model):
-    _name = 'redmine.hr.analytic.timesheet'
-    _description = 'Redmine Time Entry Binding'
-    _inherits = {'account.analytic.line': 'odoo_id'}
+class RedmineProject(models.Model):
 
-    _columns = {
-        'odoo_id': fields.Many2one(
-            'account.analytic.line', 'Timesheet', required=True,
-            ondelete='cascade'
-        ),
-    }
+    _name = 'redmine.project'
+    # _inherit = "project.project"
+
+    project_title = fields.Char(required=True, default='123')
+
+    @api.one
+    def sync_projects(self):
+        redmine = Redmine('https://pm.syntech.software', username='oleg.karpov@syntech.software', password='123456')
+        for project in redmine.project.all():
+            self.create({'project_title': project.name})
+
+    def cron_fetch_data(self):
+        _logger.info('Fetched data')
