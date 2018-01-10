@@ -59,29 +59,24 @@ class RedmineTimeEntry(orm.Model):
                     pass
 
                 for time_entry in time_entrys:
-                    time_entry_name = time_entry.comments or str(time_entry)
-                    timesheet_obj = self.env['account.analytic.line'].create({
-                        'name': time_entry_name,
-                        'project_id': proj_obj.id,
-                        'task_id': task_obj.id
-                    })
-                    self.create({
-                        'timesheet_id': timesheet_obj.id,
-                        'redmine_id': time_entry.id,
-                        'sync_date': datetime.now(),
-                        'updated_on_redmine': datetime.now(),
-                        'name': time_entry.comments,
-                        'create_date': time_entry.created_on,
-                        'amount': time_entry.hours,
-                    })
+                    if not self.search([('redmine_id', '=', time_entry.id)]):
 
-                    # # check if project exists
-            # # project_obj = project_model.search([('name', '=', project.name)])
-            # # if not project_obj:
-            # project_model = self.pool.get('project.project')
-            # proj = project_model.create(project_model, {'name': project.name})
-            # _logger.info('11111', proj)
+                        time_entry_name = time_entry.comments or str(time_entry)
+                        timesheet_obj = self.env['account.analytic.line'].create({
+                            'name': time_entry_name,
+                            'project_id': proj_obj.id,
+                            'task_id': task_obj.id
+                        })
 
+                        self.create({
+                            'timesheet_id': timesheet_obj.id,
+                            'redmine_id': time_entry.id,
+                            'sync_date': datetime.now(),
+                            'updated_on_redmine': datetime.now(),
+                            'name': time_entry.comments,
+                            'create_date': time_entry.created_on,
+                            'amount': time_entry.hours,
+                        })
 
         return super(RedmineTimeEntry, self).write(vals)
 
