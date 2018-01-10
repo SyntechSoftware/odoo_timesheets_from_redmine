@@ -21,14 +21,12 @@ class RedmineTimeEntry(orm.Model):
 
 
     @api.model
-    def create(self, vals):
-        return super(RedmineTimeEntry, self).create(vals)
-
-    def write(self, vals):
+    def sync_data_from_redmine(self):
+        _logger.info('1111111')
         from redminelib import Redmine
         redmine = Redmine('https://pm.syntech.software', username='oleg.karpov@syntech.software', password='123456')
         for project in redmine.project.all():
-            if not self.env['project.project'].search([('name', '!=', project.name)]):
+            if self.env['project.project'].search([('name', '!=', project.name)]):
                 proj_obj = self.env['project.project'].create({'name': project.name, 'allow_timesheets': True})
 
                 tasks = []
@@ -38,7 +36,7 @@ class RedmineTimeEntry(orm.Model):
                     pass
 
                 for task in tasks:
-                    if not self.env['project.project'].search([('name', '!=', str(task)), ('project_id', '!=', project.id)]):
+                    if self.env['project.task'].search([('name', '!=', str(task)), ('project_id', '!=', project.id)]):
 
                         task_obj = self.env['project.task'].create({
                             'project_id': proj_obj.id,
@@ -80,6 +78,9 @@ class RedmineTimeEntry(orm.Model):
                                     'amount': time_entry.hours,
                                 })
 
+    @api.multi
+    def write(self, vals):
+        self.sync_data_from_redmine()
         return super(RedmineTimeEntry, self).write(vals)
 
 

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+
+    <t t-name="sync_button">
+        <button type="button" name="sync_redmine" class="o_button_sync btn btn-sm btn-default">
+            Sync from redmine
+        </button>
+        <function
+            id="function_without_params"
+            model="product.product"
+            name="oe_method_without_params"/>
+    </t>
+
+    <t t-extend="ListView.buttons">
+        <t t-jquery="button.o_list_button_add" t-operation="after">
+           <t t-call="sync_button"/>
+        </t>
+    </t>
+</templates>
