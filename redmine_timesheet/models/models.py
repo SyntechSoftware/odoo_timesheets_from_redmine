@@ -22,7 +22,6 @@ class RedmineTimeEntry(orm.Model):
 
     @api.model
     def sync_data_from_redmine(self):
-        _logger.info('1111111')
         from redminelib import Redmine
         redmine = Redmine('https://pm.syntech.software', username='oleg.karpov@syntech.software', password='123456')
         for project in redmine.project.all():
@@ -78,10 +77,10 @@ class RedmineTimeEntry(orm.Model):
                                     'amount': time_entry.hours,
                                 })
 
-    @api.multi
-    def write(self, vals):
-        self.sync_data_from_redmine()
-        return super(RedmineTimeEntry, self).write(vals)
+    # @api.multi
+    # def write(self, vals):
+    #     self.sync_data_from_redmine()
+    #     return super(RedmineTimeEntry, self).write(vals)
 
 
 
