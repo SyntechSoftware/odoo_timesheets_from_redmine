@@ -22,10 +22,11 @@ class RedmineTimeEntry(orm.Model):
 
     @api.model
     def sync_data_from_redmine(self):
+        _logger.info(self.env['hr.employee'])
         from redminelib import Redmine
         redmine = Redmine('https://pm.syntech.software', username='oleg.karpov@syntech.software', password='123456')
         for project in redmine.project.all():
-            if self.env['project.project'].search([('name', '!=', project.name)]):
+            if not self.env['project.project'].search([('name', '=', project.name)]):
                 proj_obj = self.env['project.project'].create({'name': project.name, 'allow_timesheets': True})
 
                 tasks = []
@@ -35,7 +36,7 @@ class RedmineTimeEntry(orm.Model):
                     pass
 
                 for task in tasks:
-                    if self.env['project.task'].search([('name', '!=', str(task)), ('project_id', '!=', project.id)]):
+                    if not self.env['project.task'].search([('name', '=', str(task)), ('project_id', '!=', project.id)]):
 
                         task_obj = self.env['project.task'].create({
                             'project_id': proj_obj.id,
@@ -58,13 +59,18 @@ class RedmineTimeEntry(orm.Model):
                             pass
 
                         for time_entry in time_entrys:
-                            if self.search([('redmine_id', '!=', time_entry.id)]):
+                            if not self.search([('redmine_id', '=', time_entry.id)]):
+                                if not self.env['hr.employee'].search([('name', '=', time_entry.user.name)]):
+                                    employee = self.env['hr.employee'].create({'name': time_entry.user.name})
+                                else:
+                                    employee = self.env['hr.employee'].search([('name', '=', time_entry.user.name)])[0]
 
                                 time_entry_name = time_entry.comments or str(time_entry)
                                 timesheet_obj = self.env['account.analytic.line'].create({
                                     'name': time_entry_name,
                                     'project_id': proj_obj.id,
-                                    'task_id': task_obj.id
+                                    'task_id': task_obj.id,
+                                    'employee_id': employee.id,
                                 })
 
                                 self.create({
@@ -72,7 +78,7 @@ class RedmineTimeEntry(orm.Model):
                                     'redmine_id': time_entry.id,
                                     'sync_date': datetime.now(),
                                     'updated_on_redmine': datetime.now(),
-                                    'name': time_entry.comments,
+                                    'name': time_entry.comments or 'no time comments',
                                     'create_date': time_entry.created_on,
-                                    'amount': time_entry.hours,
+                                    'unit_amount': time_entry.hours,
                                 })
