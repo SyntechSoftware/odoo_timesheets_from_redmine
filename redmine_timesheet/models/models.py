@@ -76,11 +76,3 @@ class RedmineTimeEntry(orm.Model):
                                     'create_date': time_entry.created_on,
                                     'amount': time_entry.hours,
                                 })
-
-    # @api.multi
-    # def write(self, vals):
-    #     self.sync_data_from_redmine()
-    #     return super(RedmineTimeEntry, self).write(vals)
-
-
-

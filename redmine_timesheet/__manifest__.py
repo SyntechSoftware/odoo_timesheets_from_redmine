@@ -11,9 +11,9 @@
     'license': 'AGPL-3',
     'data': [
         'views/redmine_menu.xml',
-        'views/tree_view_asset.xml'
+        'views/tree_view_asset.xml',
         # 'views/redmine_backend_view.xml',
-        'views/views.xml',
+        # 'views/views.xml',
         'cron/fetch_data.xml',
     ],
     'qweb': ['static/src/xml/tree_view_button.xml'],

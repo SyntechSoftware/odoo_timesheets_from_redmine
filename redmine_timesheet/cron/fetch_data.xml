@@ -10,7 +10,7 @@
             <field name="numbercall">-1</field>
             <field name="state">code</field>
             <field name="doal">1</field>
-            <field name="model_id" ref="redmine.hr.analytic.timesheet"/>
+            <field name="model_id" ref="model_redmine_hr_analytic_timesheet"/>
             <field name="code">model.sync_data_from_redmine()</field>
         </record>
    </data>
