@@ -1,8 +1,8 @@
 {
     'name': 'Redmine Timesheets',
-    'summary': """This module will add a record to store student details""",
+    'summary': """This module will allow to populate data from redmine to odoo existing modules""",
     'version': '11',
-    'description': """This module will add a record to store student details""",
+    'description': """This module will allow to populate data from redmine to odoo existing modules""",
     'author': 'Oleg Karpov',
     'company': 'Syntech Software',
     'website': 'http://syntech.software/',
@@ -10,7 +10,8 @@
     'depends': ['hr_timesheet'],
     'license': 'AGPL-3',
     'data': [
-        'views/redmine_menu.xml',
+        'views/redmine_timesheet_menu_item.xml',
+        'views/res_config_settings_views.xml',
         'cron/fetch_data.xml',
     ],
     'demo': [],
