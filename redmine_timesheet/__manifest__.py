@@ -18,9 +18,6 @@
     'installable': True,
     'auto_install': False,
     "external_dependencies": {
-        'python3': ['redminelib', 'python-redmine'],
-        'pip3': ['python-redmine'],
-        #for odoo 10
-        'pip': ['python-redmine'],
+        'python': ['redminelib'],
     },
 }
