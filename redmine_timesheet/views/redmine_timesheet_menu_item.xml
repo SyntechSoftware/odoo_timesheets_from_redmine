@@ -8,20 +8,12 @@
             <field name="domain">[('project_id', '!=', False)]</field>
         </record>
 
-        <record id="redmine_user" model="ir.actions.act_window">
-            <field name="name">Redmine User</field>
-            <field name="res_model">redmine.hr.analytic.user</field>
-            <field name="domain">[]</field>
-        </record>
-
 
         <menuitem id="menu_redmine" name="Redmine Timesheets"/>
 
         <menuitem id="redmine_timesheets" name="Redmine Timesheets" parent="menu_redmine"
                   action="timesheet_action_all"/>
 
-        <menuitem id="redmine_user" name="Redmine User" parent="menu_redmine"
-                  action="redmine_user"/>
 
     </data>
 </odoo>
