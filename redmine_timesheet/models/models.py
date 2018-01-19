@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime
-from odoo import models, fields, api
+from odoo import models, fields, api, _
 import logging
 
 from odoo.exceptions import UserError
@@ -21,19 +21,22 @@ class RedmineTimeEntry(orm.Model):
 
 
     @api.model
-    def sync_data_from_redmine(self):
-        params = self.env['ir.config_parameter'].sudo()
-        if not any([params.get_param('redmine_timesheet.redmine_api_key'),
-                    params.get_param('redmine_timesheet.redmine_url')]):
-            raise UserError(_('Please set redmine api credentials'))
-
+    def sync_data_from_redmine(self, api_key=None, url=None):
         try:
             from redminelib import Redmine
         except ImportError:
-            raise UserError(_('Missing python dependency, check https://python-redmine.com/'))
+            raise UserError(_('Missing python dependency (python-redmine), check https://python-redmine.com/'))
 
-        redmine = Redmine(params.get_param('redmine_timesheet.redmine_url'),
-                          key=params.get_param('redmine_timesheet.redmine_api_key'))
+        if any([api_key, url]):
+            redmine = Redmine(url, key=api_key)
+        else:
+            params = self.env['ir.config_parameter'].sudo()
+            if not any([params.get_param('redmine_timesheet.redmine_api_key'),
+                        params.get_param('redmine_timesheet.redmine_url')]):
+                raise UserError(_('Please set redmine api credentials in module settings'))
+
+            redmine = Redmine(params.get_param('redmine_timesheet.redmine_url'),
+                              key=params.get_param('redmine_timesheet.redmine_api_key'))
         try:
             redmine.auth()
         except Exception as e:

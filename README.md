@@ -1,6 +1,6 @@
 # Odoo module for connection with redmine and sync projects, issues, time entries form redmine and pooulate it in odoo
 
-Odoo modules to connect with Redmine (http://redmine.org)
+Odoo modules to connect with Redmine (http://redmine.org) based on python package (https://python-redmine.com/)
 
 Installation
 ----------------------

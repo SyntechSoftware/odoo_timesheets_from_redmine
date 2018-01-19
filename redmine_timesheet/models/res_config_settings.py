@@ -42,7 +42,8 @@ class ResConfigSettings(models.TransientModel):
         if vals.get('redmine_api_key') or vals.get('redmine_url'):
             RedmineConfig._check_redmine_authorization(vals)
 
-        self.env['redmine.hr.analytic.timesheet'].sync_data_from_redmine()
+        self.env['redmine.hr.analytic.timesheet'].sync_data_from_redmine(api_key=vals.get('redmine_api_key'),
+                                                                         url=vals.get('redmine_url'))
         return RedmineConfig
 
     @api.multi
