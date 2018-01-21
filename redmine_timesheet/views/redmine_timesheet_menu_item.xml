@@ -2,17 +2,48 @@
 <odoo>
     <data>
 
+        <record id="redmine_timesheet_line_tree" model="ir.ui.view">
+            <field name="name">redmine.hr.analytic.timesheet.line.tree.redmine_timesheet</field>
+            <field name="model">redmine.hr.analytic.timesheet</field>
+            <field name="arch" type="xml">
+                <tree editable="top" string="Timesheet Activities">
+                    <field name="date"/>
+                    <field name="user_id" required="1" options='{"no_open": True}'/>
+                    <field name="name"/>
+                    <field name="project_id" required="1"/>
+                    <field name="task_id" context="{'default_project_id': project_id}" domain="[('project_id', '=', project_id)]"/>
+                    <field name="unit_amount" string="Duration" sum="Total time" widget="float_time"/>
+                </tree>
+            </field>
+        </record>
+
         <record id="timesheet_action_all" model="ir.actions.act_window">
-            <field name="name">All Timesheets</field>
+            <field name="name">Timesheets</field>
             <field name="res_model">redmine.hr.analytic.timesheet</field>
             <field name="domain">[('project_id', '!=', False)]</field>
         </record>
 
+        <record model="ir.actions.act_window.view" id="redmine_timesheet_line_view_tree">
+            <field name="view_mode">tree</field>
+            <field name="sequence">1</field>
+            <field name="view_id" ref="redmine_timesheet.redmine_timesheet_line_tree"/>
+            <field name="act_window_id" ref="timesheet_action_all"/>
+        </record>
 
-        <menuitem id="menu_redmine" name="Redmine Timesheets"/>
 
-        <menuitem id="redmine_timesheets" name="Redmine Timesheets" parent="menu_redmine"
-                  action="timesheet_action_all"/>
+
+        <menuitem id="menu_redmine"
+                  name="Redmine Timesheets"
+                  web_icon="redmine_timesheet,static/description/icon.png"/>
+
+        <menuitem id="redmine_timesheets" name="Redmine Timesheets" parent="menu_redmine"/>
+        <menuitem id="redmine_timesheets_config" name="Configuration" parent="menu_redmine"/>
+
+        <menuitem id="timesheet_menu_activity_all"
+            name="All Timesheets"
+            parent="redmine_timesheets"
+            action="timesheet_action_all"/>
+
 
 
     </data>
