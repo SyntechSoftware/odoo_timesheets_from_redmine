@@ -123,15 +123,25 @@ class RedmineTimeEntry(orm.Model):
         description = time_entry.comments
         if not self.search(time_entry_query).exists():
             user, account = self.get_user_and_account(time_entry.user.id)
-            timesheet = self.env['account.analytic.line'].create({
-                'user_id': user.id,  # res.user
-                'name': description,  # description
-                'date': time_entry.created_on,  #
-                'account_id': account.id,  # xz
-                'project_id': project.id,
-                'task_id': task.id,
-                'unit_amount': time_entry.hours
-            })
+            # Check timesheet in app 'hr_timesheets'
+            timesheet_exists = self.env['account.analytic.line'].search([
+                ('name', '=', description),
+                ('project_id', '=', project.id),
+                ('task_id', '=', task.id),
+                ('user_id', '=', user.id),
+            ])
+            if timesheet_exists.exists():
+                timesheet = timesheet_exists[0]
+            else:
+                timesheet = self.env['account.analytic.line'].create({
+                    'user_id': user.id,  # res.user
+                    'name': description,  # description
+                    'date': time_entry.created_on,  #
+                    'account_id': account.id,  # xz
+                    'project_id': project.id,
+                    'task_id': task.id,
+                    'unit_amount': time_entry.hours
+                })
             self.create({
                 'timesheet_id': timesheet.id,
                 'redmine_id': time_entry.id,
